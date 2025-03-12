@@ -60,9 +60,9 @@ class _HomeScreenState extends State<HomeScreen> {
         setState(() => isLoading = false);
       });
     } catch (e) {
-      ScaffoldMessenger.of(
-        context,
-      ).showSnackBar(SnackBar(content: Text("Gagal menghasilkan jadwal: $e")));
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text("Gagal menghasilkan jadwal: $e")),
+      );
       setState(() => isLoading = false);
     }
   }
@@ -70,51 +70,68 @@ class _HomeScreenState extends State<HomeScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: Text("Schedule Generator")),
+      appBar: AppBar(
+        title: Text("Schedule Generator"),
+        backgroundColor: Colors.orange,
+      ),
       body: Padding(
         padding: const EdgeInsets.all(16),
         child: Column(
           children: [
             TextField(
               controller: taskController,
-              decoration: InputDecoration(labelText: "Nama Tugas"),
+              decoration: InputDecoration(
+                labelText: "Nama Tugas",
+                border: OutlineInputBorder(),
+              ),
             ),
+            SizedBox(height: 10),
             TextField(
               controller: durationController,
-              decoration: InputDecoration(labelText: "Durasi (menit)"),
+              decoration: InputDecoration(
+                labelText: "Durasi (menit)",
+                border: OutlineInputBorder(),
+              ),
               keyboardType: TextInputType.number,
             ),
-            DropdownButton<String>(
+            SizedBox(height: 10),
+            DropdownButtonFormField<String>(
               value: priority,
-              hint: Text("Pilih Prioritas"),
+              decoration: InputDecoration(
+                border: OutlineInputBorder(),
+                labelText: "Pilih Prioritas",
+              ),
               onChanged: (value) => setState(() => priority = value),
-              items:
-                  ["Tinggi", "Sedang", "Rendah"]
-                      .map(
-                        (priorityMember) => DropdownMenuItem(
-                          value: priorityMember,
-                          child: Text(priorityMember),
-                        ),
-                      )
-                      .toList(),
+              items: ["Tinggi", "Sedang", "Rendah"]
+                  .map((priorityMember) => DropdownMenuItem(
+                        value: priorityMember,
+                        child: Text(priorityMember),
+                      ))
+                  .toList(),
             ),
+            SizedBox(height: 10),
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 ElevatedButton(
                   onPressed: _addTask,
+                  style: ElevatedButton.styleFrom(
+                    backgroundColor: Colors.orange,
+                    foregroundColor: Colors.white,
+                  ),
                   child: Text("Tambahkan Tugas"),
                 ),
                 ElevatedButton(
                   onPressed: _clearTasks,
-                  style: ElevatedButton.styleFrom(backgroundColor: Colors.red),
-                  child: Text(
-                    "Hapus Semua",
-                    style: TextStyle(color: Colors.white),
+                  style: ElevatedButton.styleFrom(
+                    backgroundColor: Colors.red,
+                    foregroundColor: Colors.white,
                   ),
+                  child: Text("Hapus Semua"),
                 ),
               ],
             ),
+            SizedBox(height: 10),
             Expanded(
               child: ListView.builder(
                 itemCount: tasks.length,
@@ -123,8 +140,12 @@ class _HomeScreenState extends State<HomeScreen> {
                   return Card(
                     elevation: 3,
                     margin: EdgeInsets.symmetric(vertical: 6),
+                    color: Colors.orange[100],
                     child: ListTile(
-                      title: Text("${task['name']}"),
+                      title: Text(
+                        "${task['name']}",
+                        style: TextStyle(fontWeight: FontWeight.bold),
+                      ),
                       subtitle: Text(
                         "Prioritas: ${task['priority']} | Durasi: ${task['duration']} menit",
                       ),
@@ -133,15 +154,20 @@ class _HomeScreenState extends State<HomeScreen> {
                 },
               ),
             ),
+            SizedBox(height: 10),
             isLoading
                 ? CircularProgressIndicator()
                 : ElevatedButton(
-                  onPressed: _generateSchedule,
-                  child: Text("Generate Schedule"),
-                ),
+                    onPressed: _generateSchedule,
+                    style: ElevatedButton.styleFrom(
+                      backgroundColor: Colors.orange,
+                      foregroundColor: Colors.white,
+                    ),
+                    child: Text("Generate Schedule"),
+                  ),
           ],
         ),
       ),
-     );
+    );
   }
 }
